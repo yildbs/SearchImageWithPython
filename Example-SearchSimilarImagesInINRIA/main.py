@@ -13,11 +13,11 @@ if __name__=="__main__":
     sift = utils.featureextractor.SiftFeatureExtractor()
 
     feature_database = []
-    for index, path in zip(range(999), sorted(glob.glob("../INRIA_Train_original/pos/*.png"))):
+    for index, path in zip(range(100), sorted(glob.glob("../INRIA_Train_original/pos/*.png"))):
         feature_database.append(sift.get_image_feature_with_filename(path))
 
     targets = []
-    for index, path in zip(range(999), sorted(glob.glob("../INRIA_Train_160x96/pos/*.png"))):
+    for index, path in zip(range(999), glob.glob("../INRIA_Train_160x96/pos/*.png")):
         targets.append(sift.get_image_feature_with_filename(path))
 
     for target in targets:
@@ -35,6 +35,9 @@ if __name__=="__main__":
         cv2.imshow("target_image", target_image)
         for index, match in zip(range(len(matched)), matched):
             match_image = cv2.imread(match.get_filename())
+            width = match_image.shape[0]
+            height = match_image.shape[1]
+            match_image = cv2.resize(match_image, (300, int(300/height*width)))
             cv2.imshow("match_image_"+str(index), match_image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
